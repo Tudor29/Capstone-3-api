@@ -110,16 +110,16 @@ function getBackgroundImage(iconCode) {
       return "./images/clear_sky.jpg";
     case "02d":
     case "02n":
-      return "./images/few_clouds.jpg";
+      return "./images/cloudy.jpg";
     case "03d":
     case "03n":
-      return "./images/scattered_clouds.jpg";
+      return "./images/cloudy.jpg";
     case "04d":
     case "04n":
-      return "./images/broken_clouds.jpg";
+      return "./images/cloudy.jpg";
     case "09d":
     case "09n":
-      return "./images/shower_rain.jpg";
+      return "./images/rain.jpg";
     case "10d":
     case "10n":
       return "./images/rain.jpg";
