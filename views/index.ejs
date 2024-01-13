@@ -5,6 +5,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Crank's Weather</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Salsa&display=swap" rel="stylesheet">
   <link rel="icon" href="./images/head_logo.png" type="image/x-icon">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
   <link rel="stylesheet" href="./styles/main.css" />
@@ -25,10 +28,10 @@
         </div>
         <% if(weatherData) { %>
         <div class="weather-result mt-4 text app">
-          <h2 class="text-center mb-4">Weather in <%= city %></h2>
+          <h2 class="text-center mb-4 txt">Weather in <%= city %></h2>
 
           <div class="current-weather-container">
-            <div class="current-weather">
+            <div class="current-weather txt">
               <p>Temperature: <%= weatherData.current.temp %>°C</p>
               <p>Feels like: <%= weatherData.current.feels_like %>°C</p>
               <p>Weather: <%= weatherData.current.weather[0].description %></p>
@@ -38,12 +41,12 @@
           </div>
 
           <div class="hourly-forecast mt-4">
-            <h3>Hourly Forecast</h3>
+            <h3 class="text-center mb-4 txt">Hourly Forecast</h3>
             <div class="horizontal-scroll">
               <div class="d-flex">
                 <% for (let i = 0; i < weatherData.hourly.length; i++) { %>
-                <div class="card mx-2" style="width: 18rem;">
-                  <div class="card-body">
+                <div class="card mx-2 bkgr" style="width: 18rem;">
+                  <div class="card-body txt">
                     <h5 class="card-title"><%= getHourlyForecastDay(weatherData.hourly[i].dt) %></h5>
                     <p class="card-text">Temp: <%= weatherData.hourly[i].temp %>°C</p>
                     <p class="card-text">Humidity: <%= weatherData.hourly[i].humidity %>%</p>
@@ -56,12 +59,12 @@
           </div>
 
           <div class="daily-forecast mt-4">
-            <h3>Daily Forecast</h3>
+            <h3 class="text-center mb-4 txt">Daily Forecast</h3>
             <div class="horizontal-scroll">
               <div class="d-flex">
                 <% for (let i = 0; i < weatherData.daily.length; i++) { %>
-                <div class="card mx-2" style="width: 18rem;">
-                  <div class="card-body">
+                <div class="card mx-2 bkgr" style="width: 18rem;">
+                  <div class="card-body txt">
                     <h5 class="card-title"><%= getFormattedDailyDate(weatherData.daily[i].dt) %></h5>
                     <p class="card-text">Day Temp: <%= weatherData.daily[i].temp.day %>°C</p>
                     <p class="card-text">Night Temp: <%= weatherData.daily[i].temp.night %>°C</p>

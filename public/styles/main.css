@@ -3,10 +3,6 @@ body {
   font-family: 'Arial', sans-serif;
 }
 
-.text {
-  color: #FFFFFF;
-}
-
 .app {
   background-color: #3C0753;
   border-radius: 20px;
@@ -95,4 +91,15 @@ body {
   width: 100%;
   max-width: 400px;
   text-align: center;
+}
+
+.bkgr{
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.txt{
+  color: white;
+  font-family: "Salsa", cursive;
+  font-weight: 400;
+  font-style: normal;
 }
