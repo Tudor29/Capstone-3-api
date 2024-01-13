@@ -17,6 +17,7 @@ app.get("/", async (req, res) => {
         `${API_URL}/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
       );
       res.render("index", { weather: result.data });
+      console.log(result.data);
     } catch (error) {
       console.error(error.response || error);
       res.render("index", { weather: null });

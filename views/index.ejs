@@ -29,9 +29,11 @@
               <% if(weather) { %>
                   <div class="container col-6 weather-result mt-4 text app">
                       <h2>Weather in <%= weather.name %></h2>
-                      <p>Temperature: <%= weather.main.temp %>°C</p>
-                      <p>Weather: <%= weather.weather[0].main %></p>
+                      <p>Temperature: <%= weather.main.temp %> °C</p>
+                      <p>Feels like: <%= weather.main.feels_like %> °C</p>
+                      <p>Weather: <%= weather.weather[0].description.charAt(0).toUpperCase() + weather.weather[0].description.slice(1) %></p>
                       <p>Wind Speed: <%= weather.wind.speed %> km/h</p>
+                      <p>Humidity: <%= weather.main.humidity %> %</p>
                   </div>
               <% } else { %>
                   <p>No weather data available. Try searching for a city.</p>
