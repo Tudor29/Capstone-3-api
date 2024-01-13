@@ -1,21 +1,35 @@
-
-body{
+body {
   background-color: #030637;
+  font-family: 'Arial', sans-serif;
 }
 
-.text{
-  color: #910A67;
+.text {
+  color: #FFFFFF;
 }
 
-.app{
+.app {
   background-color: #3C0753;
-  border-radius: 30px;
+  border-radius: 20px;
+  padding: 20px;
+  margin-top: 30px;
+  box-shadow: 0 8px 20px 0 rgba(98, 83, 225, 0.5);
+}
+
+.weather-result p {
+  font-size: 1rem;
+  margin: 5px 0;
 }
 
 .search-bar-container {
   display: flex;
   justify-content: center;
   margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.form-control {
+  border-radius: 25px;
+  margin-right: 10px;
 }
 
 .bn632-hover {
@@ -26,20 +40,15 @@ body{
   cursor: pointer;
   margin: 20px;
   height: 55px;
-  text-align: center;
+  text-align:center;
   border: none;
   background-size: 300% 100%;
   border-radius: 50px;
-  -o-transition: all 0.4s ease-in-out;
-  -webkit-transition: all 0.4s ease-in-out;
   transition: all 0.4s ease-in-out;
 }
 
 .bn632-hover:hover {
   background-position: 100% 0;
-  moz-transition: all 0.4s ease-in-out;
-  -o-transition: all 0.4s ease-in-out;
-  -webkit-transition: all 0.4s ease-in-out;
   transition: all 0.4s ease-in-out;
 }
 
@@ -56,4 +65,8 @@ body{
     #f24645
   );
   box-shadow: 0 4px 15px 0 rgba(126, 52, 161, 0.75);
+}
+
+.row + .row {
+  margin-top: 30px;
 }
