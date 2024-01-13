@@ -3,27 +3,32 @@ import axios from "axios";
 import bodyParser from "body-parser";
 const app = express();
 const port = 3000;
-const API_URL = "http://api.openweathermap.org";
-const API_KEY = "ecdf4bfb03da691940e81391a70423f1";
+const GEO_API_URL = "https://api.openweathermap.org/geo/1.0/direct";
+const WEATHER_API_URL = "https://api.openweathermap.org/data/3.0/onecall";
+const API_KEY = "a7acbb3e48177f801a9ef5fa2b8ffeb0";
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/", async (req, res) => {
   const city = req.query.city;
+
   if (city) {
     try {
-      const result = await axios.get(
-        `${API_URL}/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
+      const geoResponse = await axios.get(
+        `${GEO_API_URL}?q=${city}&limit=1&appid=${API_KEY}`
       );
-      res.render("index", { weather: result.data });
-      console.log(result.data);
+      const { lat, lon } = geoResponse.data[0];
+      const weatherResponse = await axios.get(
+        `${WEATHER_API_URL}?lat=${lat}&lon=${lon}&exclude=minutely,hourly,daily,alerts&appid=${API_KEY}&units=metric`
+      );
+      res.render("index", { weather: weatherResponse.data, city: city });
     } catch (error) {
       console.error(error.response || error);
-      res.render("index", { weather: null });
+      res.render("index", { weather: null, city: null });
     }
   } else {
-    res.render("index", { weather: null });
+    res.render("index", { weather: null, city: null });
   }
 });
 

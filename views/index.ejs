@@ -27,16 +27,18 @@
               </form>               
               </div>
               <% if(weather) { %>
-                  <div class="container col-6 weather-result mt-4 text app">
-                      <h2>Weather in <%= weather.name %></h2>
-                      <p>Temperature: <%= weather.main.temp %> °C</p>
-                      <p>Feels like: <%= weather.main.feels_like %> °C</p>
-                      <p>Weather: <%= weather.weather[0].description.charAt(0).toUpperCase() + weather.weather[0].description.slice(1) %></p>
-                      <p>Wind Speed: <%= weather.wind.speed %> km/h</p>
-                      <p>Humidity: <%= weather.main.humidity %> %</p>
-                  </div>
+                <div class="container col-6 weather-result mt-4 text app">
+                  <h2>Weather in <%= city %></h2>
+                  <p>Temperature: <%= weather.current.temp %>°C</p>
+                  <p>Feels like: <%= weather.current.feels_like %>°C</p>
+                  <% if(weather.current.weather && weather.current.weather.length > 0) { %>
+                    <p>Weather: <%= weather.current.weather[0].description.charAt(0).toUpperCase() + weather.current.weather[0].description.slice(1) %></p>
+                  <% } %>
+                  <p>Wind Speed: <%= weather.current.wind_speed %> km/h</p>
+                  <p>Humidity: <%= weather.current.humidity %> %</p>
+                </div>
               <% } else { %>
-                  <p>No weather data available. Try searching for a city.</p>
+                <p>No weather data available. Try searching for a city.</p>
               <% } %>
           </div>
       </div>
