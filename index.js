@@ -36,23 +36,20 @@ function getFormattedDailyDate(timestamp) {
 }
 
 app.get("/", async (req, res) => {
-  let city = req.query.city;
-  const { lat, lon } = req.query;
+  let { city, lat, lon } = req.query;
+  let weatherData = null;
+  let iconUrl = null;
+  let backgroundImage = null;
 
   if (lat && lon) {
     try {
       const weatherResponse = await axios.get(
         `${WEATHER_API_URL}?lat=${lat}&lon=${lon}&exclude=minutely&appid=${API_KEY}&units=metric`
       );
-      res.render("index", {
-        weatherData: weatherResponse.data,
-        city: "Your Current Location",
-        getHourlyForecastDay,
-        getFormattedDailyDate,
-      });
+      weatherData = weatherResponse.data;
+      city = "Your Current Location";
     } catch (error) {
       console.error(error.response || error);
-      res.render("index", { weatherData: null, city: null });
     }
   } else if (city) {
     city = capitalize(city);
@@ -65,29 +62,79 @@ app.get("/", async (req, res) => {
         const weatherResponse = await axios.get(
           `${WEATHER_API_URL}?lat=${lat}&lon=${lon}&exclude=minutely&appid=${API_KEY}&units=metric`
         );
-        res.render("index", {
-          weatherData: weatherResponse.data,
-          city: city,
-          getHourlyForecastDay,
-          getFormattedDailyDate,
-        });
-      } else {
-        res.render("index", { weatherData: null, city: null });
+        weatherData = weatherResponse.data;
       }
     } catch (error) {
       console.error(error.response || error);
-      res.render("index", { weatherData: null, city: null });
     }
-  } else {
-    res.render("index", { weatherData: null, city: null });
   }
+
+  if (
+    weatherData &&
+    weatherData.current &&
+    weatherData.current.weather &&
+    weatherData.current.weather.length > 0
+  ) {
+    iconUrl = getWeatherIconUrl(weatherData.current.weather[0].icon);
+    backgroundImage = `url('${getBackgroundImage(
+      weatherData.current.weather[0].icon
+    )}')`;
+  }
+
+  res.render("index", {
+    weatherData: weatherData,
+    city: city,
+    iconUrl: iconUrl,
+    backgroundImage: backgroundImage,
+    getHourlyForecastDay,
+    getFormattedDailyDate,
+  });
 });
 
 function capitalize(str) {
-  if (str && typeof str === 'string') {
+  if (str && typeof str === "string") {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   }
   return str;
+}
+
+function getWeatherIconUrl(iconCode) {
+  return `http://openweathermap.org/img/wn/${iconCode}.png`;
+}
+
+function getBackgroundImage(iconCode) {
+  const isDay = iconCode.endsWith("d");
+  switch (iconCode) {
+    case "01d":
+    case "01n":
+      return "./images/clear_sky.jpg";
+    case "02d":
+    case "02n":
+      return "./images/few_clouds.jpg";
+    case "03d":
+    case "03n":
+      return "./images/scattered_clouds.jpg";
+    case "04d":
+    case "04n":
+      return "./images/broken_clouds.jpg";
+    case "09d":
+    case "09n":
+      return "./images/shower_rain.jpg";
+    case "10d":
+    case "10n":
+      return "./images/rain.jpg";
+    case "11d":
+    case "11n":
+      return "./images/thunderstorm.jpg";
+    case "13d":
+    case "13n":
+      return "./images/snow.jpg";
+    case "50d":
+    case "50n":
+      return "./images/mist.jpg";
+    default:
+      return "./images/default.png";
+  }
 }
 
 app.listen(port, () => {
