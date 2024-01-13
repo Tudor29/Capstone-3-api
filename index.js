@@ -10,6 +10,32 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
+function getHourlyForecastDay(timestamp) {
+  const date = new Date(timestamp * 1000);
+  const days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  return (
+    days[date.getDay()] +
+    " " +
+    date.toLocaleTimeString([], { hour: "numeric", minute: "numeric" })
+  );
+}
+
+// Function to format daily forecast date
+function getFormattedDailyDate(timestamp) {
+  const date = new Date(timestamp * 1000);
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  return `${date.toDateString().substr(0, 3)}, ${day}.${month}`;
+}
+
 app.get("/", async (req, res) => {
   const city = req.query.city;
 
@@ -20,15 +46,20 @@ app.get("/", async (req, res) => {
       );
       const { lat, lon } = geoResponse.data[0];
       const weatherResponse = await axios.get(
-        `${WEATHER_API_URL}?lat=${lat}&lon=${lon}&exclude=minutely,hourly,daily,alerts&appid=${API_KEY}&units=metric`
+        `${WEATHER_API_URL}?lat=${lat}&lon=${lon}&exclude=minutely&appid=${API_KEY}&units=metric`
       );
-      res.render("index", { weather: weatherResponse.data, city: city });
+      res.render("index", {
+        weatherData: weatherResponse.data,
+        city: city,
+        getHourlyForecastDay,
+        getFormattedDailyDate, 
+      });
     } catch (error) {
       console.error(error.response || error);
-      res.render("index", { weather: null, city: null });
+      res.render("index", { weatherData: null, city: null });
     }
   } else {
-    res.render("index", { weather: null, city: null });
+    res.render("index", { weatherData: null, city: null });
   }
 });
 
