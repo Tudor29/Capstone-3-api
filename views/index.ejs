@@ -24,6 +24,7 @@
           <form action="/" method="GET">
             <input type="text" class="form-control" name="city" placeholder="Enter City Name">
             <button type="submit" class="bn632-hover bn24">Get Weather</button>
+            <button type="button" class="bn632-hover bn24" id="current-location-btn">Current Location</button>
           </form>
         </div>
         <% if(weatherData) { %>
@@ -83,6 +84,22 @@
       </div>
     </div>
   </div>
+  
+  <script>
+    document.getElementById('current-location-btn').addEventListener('click', function() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          window.location.href = `/?lat=${lat}&lon=${lon}`;
+        }, function(error) {
+          alert('Error occurred. Error code: ' + error.code);
+        });
+      } else {
+        alert('Geolocation is not supported by this browser.');
+      }
+    });
+  </script>
 
 </body>
 

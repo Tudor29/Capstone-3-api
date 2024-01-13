@@ -28,7 +28,6 @@ function getHourlyForecastDay(timestamp) {
   );
 }
 
-// Function to format daily forecast date
 function getFormattedDailyDate(timestamp) {
   const date = new Date(timestamp * 1000);
   const day = date.getDate().toString().padStart(2, "0");
@@ -37,23 +36,44 @@ function getFormattedDailyDate(timestamp) {
 }
 
 app.get("/", async (req, res) => {
-  const city = req.query.city;
+  let city = req.query.city;
+  const { lat, lon } = req.query;
 
-  if (city) {
+  if (lat && lon) {
     try {
-      const geoResponse = await axios.get(
-        `${GEO_API_URL}?q=${city}&limit=1&appid=${API_KEY}`
-      );
-      const { lat, lon } = geoResponse.data[0];
       const weatherResponse = await axios.get(
         `${WEATHER_API_URL}?lat=${lat}&lon=${lon}&exclude=minutely&appid=${API_KEY}&units=metric`
       );
       res.render("index", {
         weatherData: weatherResponse.data,
-        city: city,
+        city: "Your Current Location",
         getHourlyForecastDay,
-        getFormattedDailyDate, 
+        getFormattedDailyDate,
       });
+    } catch (error) {
+      console.error(error.response || error);
+      res.render("index", { weatherData: null, city: null });
+    }
+  } else if (city) {
+    city = capitalize(city);
+    try {
+      const geoResponse = await axios.get(
+        `${GEO_API_URL}?q=${city}&limit=1&appid=${API_KEY}`
+      );
+      if (geoResponse.data.length > 0) {
+        const { lat, lon } = geoResponse.data[0];
+        const weatherResponse = await axios.get(
+          `${WEATHER_API_URL}?lat=${lat}&lon=${lon}&exclude=minutely&appid=${API_KEY}&units=metric`
+        );
+        res.render("index", {
+          weatherData: weatherResponse.data,
+          city: city,
+          getHourlyForecastDay,
+          getFormattedDailyDate,
+        });
+      } else {
+        res.render("index", { weatherData: null, city: null });
+      }
     } catch (error) {
       console.error(error.response || error);
       res.render("index", { weatherData: null, city: null });
@@ -62,6 +82,13 @@ app.get("/", async (req, res) => {
     res.render("index", { weatherData: null, city: null });
   }
 });
+
+function capitalize(str) {
+  if (str && typeof str === 'string') {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  }
+  return str;
+}
 
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
