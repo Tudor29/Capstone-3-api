@@ -1,11 +1,13 @@
 import express from "express";
 import axios from "axios";
 import bodyParser from "body-parser";
+import dotenv from 'dotenv';
+dotenv.config();
 const app = express();
 const port = 3000;
 const GEO_API_URL = "https://api.openweathermap.org/geo/1.0/direct";
 const WEATHER_API_URL = "https://api.openweathermap.org/data/3.0/onecall";
-const API_KEY = "a7acbb3e48177f801a9ef5fa2b8ffeb0";
+const API_KEY = process.env.OPENWEATHERMAP_API_KEY;
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
